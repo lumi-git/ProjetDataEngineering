@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea/
+
+Data/*
+DataCopy/*
+IA/DataIA/*
+VideoOutput/*
+Models/*

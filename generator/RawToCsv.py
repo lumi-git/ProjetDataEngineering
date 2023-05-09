@@ -21,6 +21,8 @@ class ProcessFiles(threading.Thread):
     def run(self):
         for file in self.files:
             with open("./Data/" + file, 'r') as f:
+                if not file.endswith(".txt"):
+                    continue
                 with open("./DataCopy/" + file.replace("txt", "csv"), 'w') as g:
                     ProcessFiles.Lock.acquire()
                     ProcessFiles.Counter += 1

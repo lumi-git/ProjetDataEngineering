@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from generator.utils import timit
 from generator.utils import printProgress
+from generator.utils import printProgressWithEstimation
 import imageio
 import plotly.express as px
 import time
@@ -13,6 +14,9 @@ FILES_TO_LOAD = 2000
 def plotMap(time_):
     Folder = "DataCopy"
     locations = []
+
+    total_processing_time = 0
+    avg_time_per_file = 0
 
     FileList = os.listdir(Folder)[:FILES_TO_LOAD]
     size = len(FileList)
@@ -53,10 +57,10 @@ def plotMap(time_):
             exit()
 
         if locations:
-            i = 0
+            i = 1
             len_ = len(locations)
-            st = time.time()
             for loc in locations:
+                start_time = time.time()
                 date_time = loc['date'][0] + " " + loc['heure'][0]
                 fig = px.scatter_mapbox(loc, lat="latitude", lon="longitude", zoom=10, height=600, width=800,
                                         center=dict(lat=48.11269100094845, lon=-1.6766415476680276),
@@ -68,11 +72,14 @@ def plotMap(time_):
                 img_bytes = fig.to_image(format="png")
 
                 video_writer.append_data(imageio.v2.imread(img_bytes))
+
                 os.system('cls' if os.name == 'nt' else 'clear')
-                printProgress(i, len_, st)
+                total_processing_time += (time.time() - start_time)
+                avg_time_per_file = total_processing_time / i
+                estimated_time = avg_time_per_file * size
+                printProgressWithEstimation(i, size, time_, estimated_time)
                 i += 1
 
 
 plotMap()
 
-# TODO: modify  to show a empty map when no bus is present in a certain time and show time on title

@@ -15,3 +15,10 @@ def printProgress(i, size,time_  = 0 ):
         size) + " files loaded")
     if time_ != 0:
         print(f" Time : {time.time()-time_} s")
+
+def printProgressWithEstimation(i, size, time_=0, estimated_time=0):
+    print("[" + "*" * int(BARSIZE * i / size) + " " * int(BARSIZE * (size - i) / size) + "] " + str(i) + "/" + str(
+        size) + " files loaded")
+    if time_ != 0:
+        print(f" Time : {time.time() - time_} s")
+        print(f" Estimated time of execution: {estimated_time} s")

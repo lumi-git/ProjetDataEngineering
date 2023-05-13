@@ -7,7 +7,7 @@ import imageio
 import plotly.express as px
 import time
 
-FILES_TO_LOAD = 2000
+FILES_TO_LOAD = -1
 
 
 @timit
@@ -18,7 +18,10 @@ def plotMap(time_):
     total_processing_time = 0
     avg_time_per_file = 0
 
-    FileList = os.listdir(Folder)[:FILES_TO_LOAD]
+    if FILES_TO_LOAD == -1:
+        FileList = os.listdir(Folder)
+    else:
+        FileList = os.listdir(Folder)[:FILES_TO_LOAD]
     size = len(FileList)
 
     print(f"1/ loading {size} files. (may take time) ...")
@@ -29,14 +32,21 @@ def plotMap(time_):
         try:
             i = 0
             for file in FileList:
+                start_time = time.time()
 
+                # verification if the file is empty
+                with open(Folder + "/" + file, 'r') as f:
+                    lines = f.readlines()
+                    if len(lines) == 0:
+                        continue
+
+                # pre-processing
                 df = pd.read_csv(Folder + "/" + file, sep=";")
                 if not df.empty:
                     df[['latitude', 'longitude']] = df['coordonnees'].apply(
                         lambda x: pd.Series(x.strip('[]').replace("[", "").replace("]", "").split(','))).astype(float)
                     locations.append(df)
                 else:
-                    print(df)
                     # add a row with the date and time on df
                     date = file.split("_")[1]
                     heure = file.split("_")[2].replace("-", ":").replace(".csv", "")
@@ -47,13 +57,17 @@ def plotMap(time_):
                     locations.append(df)
 
                 i += 1
+                total_processing_time += (time.time() - start_time)
+                avg_time_per_file = total_processing_time / i
+                estimated_time = avg_time_per_file * size
                 if (i % 100 == 0):
                     os.system('cls' if os.name == 'nt' else 'clear')
-                    printProgress(i, size, time_)
+                    printProgressWithEstimation(i, size, time_, estimated_time)
 
         except(Exception) as e:
             print("Error at file" + file)
             print(e)
+            print(file)
             exit()
 
         if locations:
@@ -82,4 +96,3 @@ def plotMap(time_):
 
 
 plotMap()
-

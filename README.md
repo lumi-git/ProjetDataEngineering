@@ -69,9 +69,15 @@ python3 ./generator/RawToCSV.py
 
 ### Data analysis video
 
+run  the following command to create a video of the data.
 ```bash
-python3 ./generator/RawToCSV.py
+python3 ./BusPlotter.py
 ```
+You can see the [video](https://drive.google.com/file/d/142b3_2_urGZfN7PI0_pnWJYAq_xexvOO/view?usp=sharing) we made with the data.
 
+## Heatmap
 
-[video](https://drive.google.com/file/d/142b3_2_urGZfN7PI0_pnWJYAq_xexvOO/view?usp=sharing)
+![](./MapImage.png)
+(open the image in a new tab to see it in full size and zoom in)
+Look at the code in the [HeatMap.ipynb](./HeatMap.ipynb) notebook.
+Run the [HeatMap.ipynb](./HeatMap.ipynb) notebook to generate the heatmap.
